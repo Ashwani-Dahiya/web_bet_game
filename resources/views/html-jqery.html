@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple jQuery Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="myDiv">
+        <p id="ponits">400</p>
+    </div>
+    <form action="">
+        <label for="num1">01</label>
+        <input type="number" name="num1" id="num1" class="input-num" min="5" max="5000">
+        </br>
+        </br>
+        <label for="num2">02</label>
+        <input type="number" name="num2" id="num2" class="input-num" min="5" max="5000">
+        </br>
+        </br>
+        <label for="num3">03</label>
+        <input type="number" name="num3" id="num3" class="input-num" min="5" max="5000">
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            // Initial points
+            let points = 400;
+
+            // Function to update points
+            function updatePoints() {
+                let totalDeduction = 0;
+
+                $('.input-num').each(function() {
+                    let value = parseInt($(this).val()) || 0;
+
+                    // Ensure value is positive
+                    if (value > 0) {
+                        totalDeduction += value;
+                    } else {
+                        $(this).val(''); // Reset negative or invalid inputs
+                    }
+                });
+
+                // Calculate new points
+                let newPoints = points - totalDeduction;
+
+                // Validation to ensure points don't go negative
+                if (newPoints >= 0) {
+                    $('#ponits').text(newPoints);
+                } else {
+                    alert("You cannot deduct more than available points!");
+                    $('.input-num').val(''); // Reset inputs
+                }
+            }
+
+            // Trigger update on input change
+            $('.input-num').on('input', function() {
+                updatePoints();
+            });
+        });
+    </script>
+</body>
+</html>

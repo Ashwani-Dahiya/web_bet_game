@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play Game - Shree Shyam Matka</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5e7dc;
+        }
+
+        .fixed-top {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: #008cba;
+            color: white;
+        }
+
+        .fixed-bottom {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #008cba;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .content-wrapper {
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
+
+        .btn-custom {
+            background-color: #ff4500;
+            color: white;
+            border: none;
+        }
+
+        .btn-custom:hover {
+            background-color: #e63e00;
+        }
+
+        .govt-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+
+        .welcome-banner {
+            background-color: #008cba;
+        }
+
+        .info-box {
+            background-color: #008cba;
+        }
+
+        .result-box {
+            background-color: #008cba;
+        }
+
+        .click-link-box {
+            background-color: #008cba;
+        }
+
+        .fade:not(.show) {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Game Header -->
+    <header class="game-header fixed-top">
+        <div class="d-flex align-items-center">
+            <a href="play.html" class="back-button">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <h1 class="game-title">बागेश्वर धाम</h1>
+        </div>
+        <div class="game-timer">
+            गेम का लास्ट टाइम<br>
+            00:15:14 | Active
+        </div>
+    </header>
+
+    <main class="content-wrapper game-content">
+        <!-- Game Type Tabs -->
+        <div class="game-types">
+            <ul class="nav nav-pills" id="game-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="jodi-tab-btn" data-bs-toggle="tab" data-bs-target="#jodi-tab"
+                        type="button" role="tab" aria-controls="jodi-tab" aria-selected="true">Jodi</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="manual-tab-btn" data-bs-toggle="tab" data-bs-target="#manual-tab"
+                        type="button" role="tab" aria-controls="manual-tab" aria-selected="false">Manual</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="harraf-tab-btn" data-bs-toggle="tab" data-bs-target="#harraf-tab"
+                        type="button" role="tab" aria-controls="harraf-tab" aria-selected="false">Harraf</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="crossing-tab-btn" data-bs-toggle="tab" data-bs-target="#crossing-tab"
+                        type="button" role="tab" aria-controls="crossing-tab" aria-selected="false">Crossing</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="copy-paste-tab-btn" data-bs-toggle="tab"
+                        data-bs-target="#copy-paste-tab" type="button" role="tab" aria-controls="copy-paste-tab"
+                        aria-selected="false">Copy Paste</button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Game Timer Banner -->
+        <div class="timer-banner">
+            मोटी जोड़ी का लास्ट टाइम : 00:00:14
+        </div>
+
+        <!-- Points Status -->
+        <div class="points-status d-flex justify-content-between">
+            <div class="points-item">
+                <div class="points-label">Points Remaining</div>
+                <div class="points-value">5</div>
+            </div>
+            <div class="points-item">
+                <div class="points-label">Points Added</div>
+                <div class="points-value">0</div>
+            </div>
+        </div>
+
+        <!-- Tab Contents -->
+        <div class="tab-content" id="game-tabContent">
+            <!-- Jodi Tab Content -->
+            <div class="tab-pane fade show active" id="jodi-tab" role="tabpanel" aria-labelledby="jodi-tab-btn">
+
+                <div class="number-grid">
+                    <div class="row g-2">
+                        <div class="col-3">
+                            <div class="number-box">
+                                <div class="number-label">00</div>
+                                <input type="number" class="number-input" min="1" max="999" />
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="number-box">
+                                <div class="number-label">01</div>
+                                <input type="number" class="number-input" min="1" max="999" />
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="number-box">
+                                <div class="number-label">02</div>
+                                <input type="number" class="number-input" min="1" max="999" />
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="number-box">
+                                <div class="number-label">03</div>
+                                <input type="number" class="number-input" min="1" max="999" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mt-1">
+                        <div class="col-3">
+                            <div class="number-box">
+                                <div class="number-label">04</div>
+                                <input type="number" class="number-input" min="1" max="999" />
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="number-box">
+                                <div class="number-label">05</div>
+                                <input type="number" class="number-input" min="1" max="999" />
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="number-box">
+                                <div class="number-label">06</div>
+                                <input type="number" class="number-input" min="1" max="999" />
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="number-box">
+                                <div class="number-label">07</div>
+                                <input type="number" class="number-input" min="1" max="999" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Continue with all number boxes up to 31 -->
+                    <!-- ... Previous number boxes ... -->
+
+                    <div class="row g-2 mt-1 mb-5">
+                        <div class="col-3">
+                            <div class="number-box">
+                                <div class="number-label">28</div>
+                                <input type="number" class="number-input" min="1" max="999" />
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="number-box">
+                                <div class="number-label">29</div>
+                                <input type="number" class="number-input" min="1" max="999" />
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="number-box">
+                                <div class="number-label">30</div>
+                                <input type="number" class="number-input" min="1" max="999" />
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="number-box">
+                                <div class="number-label">31</div>
+                                <input type="number" class="number-input" min="1" max="999" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manual Tab Content -->
+            <div class="tab-pane fade" id="manual-tab" role="tabpanel" aria-labelledby="manual-tab-btn">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="color: #ff1493; border: 1px solid #00bfff;" colspan="5">
+                                    Jodi</th>
+                                <th class="text-center" style="color: #00bfff; border: 1px solid #00bfff;">Point</th>
+                                <th class="text-center" style="color: #800080; border: 1px solid #00bfff;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="text"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td style="border: 1px solid #00bfff;"><input type="number"
+                                        class="form-control text-center p-0" style="border: none;"></td>
+                                <td class="text-center" style="border: 1px solid #00bfff;">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-between p-2" style="background-color: #f8f9fa;">
+                        <span class="fw-bold">Total Points</span>
+                        <span class="fw-bold">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Harraf Tab Content -->
+            <div class="tab-pane fade" id="harraf-tab" role="tabpanel" aria-labelledby="harraf-tab-btn">
+                <div class="container-fluid bg-light p-3">
+                    <!-- Andar Harraf Section -->
+                    <h5 class="fw-bold mb-3">Andar Harraf</h5>
+                    <div class="row row-cols-5 g-3 mb-4">
+                        <!-- 111 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">111</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 222 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">222</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 333 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">333</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 444 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">444</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 555 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">555</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 666 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">666</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 777 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">777</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 888 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">888</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 999 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">999</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 000 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">000</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bahar Harraf Section -->
+                    <h5 class="fw-bold mb-3">Bahar Harraf</h5>
+                    <div class="row row-cols-5 g-3">
+                        <!-- 111 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">111</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 222 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">222</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 333 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">333</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 444 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">444</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 555 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">555</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 666 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">666</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 777 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">777</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 888 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">888</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 999 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">999</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                        <!-- 000 -->
+                        <div class="col">
+                            <div class="border border-info">
+                                <div class="bg-info text-white text-center p-1">000</div>
+                                <input type="number" class="form-control border-0 text-center" style="outline: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="crossing-tab">
+                <div class="container-fluid bg-light p-3">
+                    <!-- Input Section -->
+                    <div class="row g-3 mb-4">
+                        <!-- First Crossing Input -->
+                        <div class="col-6">
+                            <label class="form-label fw-bold">Crossing</label>
+                            <input type="text" class="form-control" placeholder="123">
+                        </div>
+                        <!-- Second Crossing Input -->
+                        <div class="col-6">
+                            <label class="form-label fw-bold">Crossing</label>
+                            <input type="text" class="form-control" placeholder="123">
+                        </div>
+                        <!-- Points Input -->
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Points</label>
+                            <input type="number" class="form-control" placeholder="10">
+                        </div>
+                        <!-- Add Button -->
+                        <div class="col-12">
+                            <button class="btn btn-danger w-100">Add</button>
+                        </div>
+                    </div>
+
+                    <!-- Table Section -->
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Number type</th>
+                                    <th>Number</th>
+                                    <th>Points</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Crossing</td>
+                                    <td>11</td>
+                                    <td>10</td>
+                                    <td><button class="btn btn-danger btn-sm">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Crossing</td>
+                                    <td>12</td>
+                                    <td>10</td>
+                                    <td><button class="btn btn-danger btn-sm">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Crossing</td>
+                                    <td>13</td>
+                                    <td>10</td>
+                                    <td><button class="btn btn-danger btn-sm">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Crossing</td>
+                                    <td>21</td>
+                                    <td>10</td>
+                                    <td><button class="btn btn-danger btn-sm">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Crossing</td>
+                                    <td>22</td>
+                                    <td>10</td>
+                                    <td><button class="btn btn-danger btn-sm">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Crossing</td>
+                                    <td>23</td>
+                                    <td>10</td>
+                                    <td><button class="btn btn-danger btn-sm">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Crossing</td>
+                                    <td>31</td>
+                                    <td>10</td>
+                                    <td><button class="btn btn-danger btn-sm">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Crossing</td>
+                                    <td>32</td>
+                                    <td>10</td>
+                                    <td><button class="btn btn-danger btn-sm">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Crossing</td>
+                                    <td>33</td>
+                                    <td>10</td>
+                                    <td><button class="btn btn-danger btn-sm">Delete</button></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="fw-bold">Total Points</td>
+                                    <td colspan="2" class="fw-bold">90</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="tab-pane fade" id="copy-paste-tab">
+                <!-- Copy Paste content will go here -->
+            </div>
+        </div>
+
+        <!-- Play Button -->
+        <div class="play-button-container">
+            <button class="btn btn-play">Place bet</button>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Tab functionality script -->
+    <script>
+        $(document).ready(function () {
+            // Initialize Bootstrap tabs
+            var triggerTabList = [].slice.call(document.querySelectorAll('#game-tabs button'))
+            triggerTabList.forEach(function (triggerEl) {
+                var tabTrigger = new bootstrap.Tab(triggerEl)
+                triggerEl.addEventListener('click', function (event) {
+                    event.preventDefault()
+                    tabTrigger.show()
+                })
+            })
+
+            // Add active class to tab content when tab is shown
+            $('#game-tabs button').on('shown.bs.tab', function (e) {
+                $($(e.target).data('bs-target')).addClass('show active').siblings('.tab-pane').removeClass('show active');
+            });
+        });
+    </script>
+</body>
+
+</html>

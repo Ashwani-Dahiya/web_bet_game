@@ -1,0 +1,482 @@
+/* General Styles */
+body {
+    background-color: #f0f2f5;
+    padding-top: 56px;
+    padding-bottom: 60px;
+    font-family: Arial, sans-serif;
+}
+
+.content-wrapper {
+    padding: 15px;
+}
+
+/* Header Styles */
+.navbar {
+    background: #0d6efd !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.point-display {
+    color: white;
+    font-weight: bold;
+}
+
+/* Chat Buttons */
+.chat-buttons {
+    display: flex;
+    gap: 10px;
+    padding: 0 15px;
+}
+
+.deposit-chat {
+    background-color: #ff6b6b;
+    color: white;
+    flex: 1;
+    border-radius: 25px;
+    padding: 10px;
+}
+
+.withdraw-chat {
+    background-color: #ffd93d;
+    color: black;
+    flex: 1;
+    border-radius: 25px;
+    padding: 10px;
+}
+
+/* Logo */
+.govt-logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid #0d6efd;
+}
+
+/* Action Buttons */
+.action-buttons {
+    padding: 0 15px;
+}
+
+.action-buttons .btn {
+    border-radius: 5px;
+    padding: 10px;
+    font-weight: bold;
+}
+
+/* Welcome Banner */
+.welcome-banner {
+    background-color: #dc3545;
+    margin: 0 -15px;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+/* Info Box */
+.info-box {
+    background-color: #000;
+    margin: 0 -15px;
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+/* Result Box */
+.result-box {
+    background-color: white;
+    margin: 0 -15px;
+    border: 1px solid #ddd;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Click Link Box */
+.click-link-box {
+    background-color: #ffa000;
+    margin: 0 -15px;
+    color: white;
+    font-weight: bold;
+}
+
+.click-link-box .btn {
+    border-radius: 25px;
+    padding: 8px 30px;
+    font-weight: bold;
+}
+
+/* Game Info Box */
+.game-info-box {
+    background-color: #dc3545;
+    margin: 0 -15px;
+    font-size: 0.95em;
+    line-height: 1.6;
+}
+
+/* Live Result Section */
+.live-result-section {
+    margin: 0 -15px;
+}
+
+.live-result-header {
+    background-color: #28a745;
+    margin-top: 0;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.market-header {
+    background-color: #dc3545;
+    margin-top: 0;
+    font-size: 1em;
+}
+
+.market-result {
+    background-color: #ff4444;
+    margin-top: 10px    ;
+    padding: 15px;
+    color: white;
+}
+
+.market-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.market-times {
+    font-size: 0.9em;
+}
+
+.time-info {
+    text-align: center;
+}
+
+.time-info div:first-child {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 5px;
+}
+
+.results {
+    gap: 15px;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.prev-result, .today-result {
+    min-width: 45px;
+    text-align: center;
+}
+
+/* Games List Styles */
+.games-list {
+    margin: 0 -15px;
+}
+
+.game-item {
+    background-color: #00a3d3;
+    padding: 15px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.game-name {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.game-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.game-info .badge {
+    font-size: 0.9em;
+    padding: 6px 10px;
+}
+
+.game-info .bi-circle-fill {
+    font-size: 0.6em;
+    margin-right: 4px;
+}
+
+.game-info .btn-success {
+    background-color: #4caf50;
+    border: none;
+    padding: 6px 15px;
+    font-size: 0.9em;
+}
+
+.time-status .badge {
+    font-size: 1em;
+    padding: 6px 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .game-info {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+    
+    .game-info .btn-success {
+        margin-top: 5px;
+    }
+}
+
+/* Footer Styles */
+.fixed-bottom {
+    background-color: white;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+}
+
+.fixed-bottom a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.8em;
+}
+
+.fixed-bottom a.active {
+    color: #0d6efd;
+}
+
+.fixed-bottom i {
+    font-size: 1.5em;
+    margin-bottom: 2px;
+}
+
+/* Responsive Adjustments */
+@media (min-width: 768px) {
+    .content-wrapper {
+        max-width: 540px;
+        margin: 0 auto;
+    }
+}
+
+/* Responsive adjustments for market results */
+@media (max-width: 480px) {
+    .market-times {
+        font-size: 0.8em;
+    }
+    
+    .results {
+        font-size: 1.1em;
+    }
+}
+
+/* Play Game Page Styles */
+.game-header {
+    background-color: #00a3d3;
+    color: white;
+    padding: 10px 15px;
+}
+
+.game-header .back-button {
+    color: white;
+    font-size: 1.5em;
+    margin-right: 15px;
+    text-decoration: none;
+}
+
+.game-header .game-title {
+    font-size: 1.2em;
+    margin: 0;
+}
+
+.game-timer {
+    font-size: 0.9em;
+    text-align: right;
+    line-height: 1.2;
+}
+
+.game-content {
+    padding-top: 70px;
+}
+
+/* Game Type Tabs */
+.game-types {
+    background: white;
+    margin: 0 -15px;
+    padding: 10px 0;
+}
+
+.game-types .nav-pills {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.game-types .nav-link {
+    color: #000;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    border-radius: 0;
+}
+
+.game-types .nav-link.active {
+    color: #000;
+    background: none;
+    position: relative;
+}
+
+.game-types .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #000;
+}
+
+/* Tab Styles */
+.tab-content > .tab-pane {
+    display: none;
+}
+
+.tab-content > .active {
+    display: block;
+}
+
+.nav-pills .nav-link {
+    color: #666;
+    background: none;
+    border-radius: 0;
+    padding: 8px 15px;
+}
+
+.nav-pills .nav-link.active {
+    color: #dc3545;
+    background: none;
+    border-bottom: 2px solid #dc3545;
+}
+
+/* Hide other tab contents by default */
+#harraf-tab,
+#crossing-tab,
+#copy-paste-tab {
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+}
+
+/* Timer Banner */
+.timer-banner {
+    background: #ffc107;
+    color: #000;
+    padding: 8px;
+    text-align: center;
+    font-size: 0.9em;
+    margin: 0 -15px;
+}
+
+/* Points Status */
+.points-status {
+    padding: 10px 15px;
+}
+
+.points-item {
+    text-align: center;
+}
+
+.points-label {
+    color: #00a3d3;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.points-value {
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+/* Number Grid */
+.number-grid {
+    padding: 10px;
+}
+
+.number-box {
+    border: 1px solid #00a3d3;
+    text-align: center;
+}
+
+.number-label {
+    background: #00a3d3;
+    color: white;
+    padding: 3px;
+    font-size: 0.9em;
+}
+
+.number-input {
+    width: 100%;
+    border: none;
+    text-align: center;
+    padding: 5px;
+    outline: none;
+}
+
+/* Play Button */
+.play-button-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 15px;
+    background: white;
+}
+
+/* Manual Tab Styles */
+.manual-content {
+    padding: 15px;
+}
+
+.manual-content .table {
+    margin-bottom: 0;
+    background-color: white;
+}
+
+.manual-content .table th,
+.manual-content .table td {
+    padding: 10px;
+    vertical-align: middle;
+    border: 1px solid #dee2e6;
+}
+
+.manual-content .table td {
+    height: 40px;
+}
+
+.manual-content .table thead th {
+    background-color: #f8f9fa;
+    font-weight: 500;
+}
+
+.manual-content .table tfoot {
+    background-color: #f8f9fa;
+    font-weight: 500;
+}
+
+.manual-content .table tfoot td {
+    padding: 10px;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+/* Update Play Button */
+.btn-play {
+    width: 100%;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 18px;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.btn-play:hover {
+    background-color: #c82333;
+    color: white;
+}
