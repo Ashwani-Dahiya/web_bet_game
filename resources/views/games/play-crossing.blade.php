@@ -116,6 +116,7 @@
                 if (newWalletPoints >= 0) {
                     $('#pointDisplay').text(newWalletPoints);
                     $('#pointAddedDisplay').text(totalPoints);
+                    $('#total-points').text(totalPoints);
                 } else {
                     alert("You cannot deduct more than available points!");
                 }

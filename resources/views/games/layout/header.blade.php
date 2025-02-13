@@ -15,155 +15,137 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
- 
+
 </head>
 
 <body>
 
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-                background-color: #f5e7dc;
-            }
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5e7dc;
+        }
 
-            .fixed-top {
-                position: fixed;
-                top: 0;
-                width: 100%;
-                z-index: 1000;
-                background-color: #008cba;
-                color: white;
-            }
+        .fixed-top {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: #008cba;
+            color: white;
+        }
 
-            .fixed-bottom {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #008cba;
-                color: white;
-                text-align: center;
-                padding: 10px 0;
-            }
+        .fixed-bottom {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #008cba;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
 
-            .content-wrapper {
-                margin-top: 60px;
-                margin-bottom: 60px;
-            }
+        .content-wrapper {
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
 
-            .btn-custom {
-                background-color: #ff4500;
-                color: white;
-                border: none;
-            }
+        .btn-custom {
+            background-color: #ff4500;
+            color: white;
+            border: none;
+        }
 
-            .btn-custom:hover {
-                background-color: #e63e00;
-            }
+        .btn-custom:hover {
+            background-color: #e63e00;
+        }
 
-            .govt-logo {
-                width: 100px;
-                height: 100px;
-                border-radius: 50%;
-            }
+        .govt-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
 
-            .welcome-banner {
-                background-color: #008cba;
-            }
+        .welcome-banner {
+            background-color: #008cba;
+        }
 
-            .info-box {
-                background-color: #008cba;
-            }
+        .info-box {
+            background-color: #008cba;
+        }
 
-            .result-box {
-                background-color: #008cba;
-            }
+        .result-box {
+            background-color: #008cba;
+        }
 
-            .click-link-box {
-                background-color: #008cba;
-            }
+        .click-link-box {
+            background-color: #008cba;
+        }
 
-            /* Custom styles for tabs */
-            .game-types {
-                padding: 10px;
-            }
+        /* Custom styles for tabs */
+        .game-types {
+            padding: 10px;
+        }
 
-            .nav-pills .nav-link {
-                color: #008cba;
-                background-color: #fff;
-                border: 1px solid #008cba;
-                margin: 2px;
-            }
+        .nav-pills .nav-link {
+            color: #008cba;
+            background-color: #fff;
+            border: 1px solid #008cba;
+            margin: 2px;
+        }
 
-            .nav-pills .nav-link.active {
-                background-color: #008cba;
-                color: #fff;
-            }
+        .nav-pills .nav-link.active {
+            background-color: #008cba;
+            color: #fff;
+        }
 
-            .tab-content {
-                padding: 15px;
-                background-color: #fff;
-                border-radius: 5px;
-                margin-top: 10px;
-            }
+        .tab-content {
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
 
-            .tab-pane {
-                display: none;
-            }
+        .tab-pane {
+            display: none;
+        }
 
-            .tab-pane.active {
-                display: block;
-            }
+        .tab-pane.active {
+            display: block;
+        }
 
-            .fade:not(.show) {
-                display: none !important;
-            }
-        </style>
+        .fade:not(.show) {
+            display: none !important;
+        }
+        .btn-custom{
+            width: 100%;
+        }
+    </style>
 
-        <!-- Game Header -->
-        <header class="game-header fixed-top">
-            <div class="d-flex align-items-center">
-                <a href="{{ route('play.page') }}" class="back-button">
-                    <i class="bi bi-arrow-left"></i>
-                </a>
-                <h1 class="game-title">{{ $game->name }}</h1>
-            </div>
-            <div class="game-timer">
-                गेम का लास्ट टाइम<br>
-                {{ $game->timings && $game->timings->close_time
-                    ? \Carbon\Carbon::createFromFormat('H:i:s', $game->timings->close_time)->format('h:i A')
-                    : 'N/A' }}
-                | Active
-            </div>
-        </header>
+    <!-- Game Header -->
+    <header class="game-header fixed-top">
+        <div class="d-flex align-items-center">
+            <a href="{{ route('play.page') }}" class="back-button">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <h1 class="game-title">{{ $game->name }}</h1>
+        </div>
+        <div class="game-timer">
+            गेम का लास्ट टाइम<br>
+            {{ $game->timings && $game->timings->close_time
+                ? \Carbon\Carbon::createFromFormat('H:i:s', $game->timings->close_time)->format('h:i A')
+                : 'N/A' }}
+            | Active
+        </div>
+    </header>
 
 
-        <main class="content-wrapper game-content">
-            <!-- Game Type Tabs -->
-            <div class="game-types">
-                <ul class="nav nav-pills">
-                    <li class="nav-item ">
-                        <a href="{{ route('play.game', ['gameName' => $game->name]) }}" class="nav-link @if($active_nav === 'jodi') active  @endif" >Jodi</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if($active_nav === 'manual') active @endif" href="{{ route('play.manual', ['gameName' => $game->name]) }}">Manual</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link @if($active_nav === 'harraf') active @endif" href="{{ route('play.harraf', ['gameName' => $game->name]) }}">Harraf</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link @if($active_nav === 'crossing') active @endif" href="{{ route('play.crossing', ['gameName' => $game->name]) }}">Crossing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @if($active_nav === 'copy-paste') active @endif" href="{{ route('play.copy', ['gameName' => $game->name]) }}">Copy
-                            Paste</a>
-                    </li>
-
-                    {{-- <li class="nav-item">
-                        <a class="nav-link @if($active_nav === 'num-to-num') active @endif" href="{{ route('play.num-to-num', ['gameName' => $game->name]) }}">Num to Num</a>
-                    </li> --}}
-                </ul>
-            </div>
-            @yield('app-game-content')
-            @include('games.layout.footer')
+    <main class="content-wrapper game-content">
+        <!-- Game Type Tabs -->
+        <div class="game-types">
+            <h3 class="display-6 text-center">{{ $game->name }} / {{ ucfirst($active_nav) }}</h3>
+        </div>
+        @yield('app-game-content')
+        @include('games.layout.footer')

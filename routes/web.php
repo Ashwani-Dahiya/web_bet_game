@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/play-crossing/{gameName}', [PlayController::class, 'play_crossing'])->name('play.crossing');
     Route::get('/play-copy-paste/{gameName}', [PlayController::class, 'play_copy_paste'])->name('play.copy');
     Route::get('/play-num-to-num/{gameName}', [PlayController::class, 'play_num_to_num'])->name('play.num-to-num');
+    Route::get('/play-tap-play/{gameName}', [PlayController::class, 'play_tap_play'])->name('play.tap-play');
 
 
     Route::post('/place-bet-jodi', [PlaceBetController::class, 'place_bet_jodi'])->name('place-bet-jodi');
@@ -50,6 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/place-bet-crossing', [PlaceBetController::class, 'place_bet_crossing'])->name('place-bet-crossing');
     Route::post('/place-bet-copy-paste', [PlaceBetController::class, 'place_bet_copy_paste'])->name('place-bet-copy-paste');
     Route::post('/place-bet-num-to-num', [PlaceBetController::class, 'place_bet_num_to_num'])->name('place-bet-num-to-num');
+    Route::post('/place-bet-tap-play', [PlaceBetController::class, 'place_bet_tap_play'])->name('place-bet-tap-play');
 
     Route::get('/play-history', [HistoryController::class, 'play_history'])->name('play.history');
     Route::post('/filter-bet-history', [HistoryController::class, 'filter_bet_history'])->name('filter.bet.history');

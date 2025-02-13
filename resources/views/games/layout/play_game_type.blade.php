@@ -334,6 +334,10 @@
                     <span class="status-dot gray"></span>
                     Play Copy Page
                 </a>
+                <a href="{{ route('play.tap-play', ['gameName' => $game->name]) }}" class="game-button ">
+                    <span class="status-dot gray"></span>
+                    Play Tap Play
+                </a>
             </div>
         </div>
 

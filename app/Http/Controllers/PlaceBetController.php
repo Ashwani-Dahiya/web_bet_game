@@ -346,67 +346,119 @@ class PlaceBetController extends Controller
     }
 
     public function place_bet_num_to_num(Request $request)
-{
-    // Validate the request
-    $request->validate([
-        "numbers" => "required|string", // Comma-separated numbers
+    {
+        // Validate the request
+        $request->validate([
+            "numbers" => "required|string", // Comma-separated numbers
+            "game_id" => "required|integer",
+            "first_crossing" => "required|string",
+            "second_crossing" => "required|string",
+            "points" => "required|integer",
+        ]);
+
+        // Extract numbers as an array
+        $numbers = explode(',', $request->input('numbers'));
+        $firstCrossing = $request->input('first_crossing');
+        $secondCrossing = $request->input('second_crossing');
+
+        // Include first and second crossing numbers if not already in array
+        if (!in_array($firstCrossing, $numbers)) {
+            $numbers[] = $firstCrossing;
+        }
+        if (!in_array($secondCrossing, $numbers)) {
+            $numbers[] = $secondCrossing;
+        }
+
+        // Calculate total amount
+        $pointsPerNumber = $request->input('points');
+        $totalAmount = count($numbers) * $pointsPerNumber;
+
+        // Get user
+        $user = Auth::user();
+
+        // Check wallet balance
+        if ($user->wallet_balance < $totalAmount) {
+            return redirect()->route('play.page')->with('error', 'Insufficient wallet balance!');
+        }
+
+        // Deduct amount from wallet
+        $user->wallet_balance -= $totalAmount;
+        $user->save();
+
+        // Get game name
+        $game = GameModel::find($request->input('game_id'));
+        $gameName = $game ? $game->name : "Unknown Game";
+
+        // Save each bet in the database
+        $game_id = $request->input('game_id');
+        foreach ($numbers as $number) {
+            BetModel::create([
+                'user_id' => $user->id,
+                'bet_type' => "num_to_num",
+                'game_id' => $game_id,
+                'number' => $number,
+                'amount' => $pointsPerNumber,
+                'status' => "pending",
+            ]);
+        }
+
+        // Redirect with success message
+        return redirect()->route('play.page')->with(
+            'success-bet',
+            "Your 'Number to Number' bets for '{$gameName}' have been placed successfully! Total Points: {$totalAmount}"
+        );
+    }
+    public function place_bet_tap_play(Request $request)
+    {
+      // Validate the request
+      $request->validate([
+        "jodi" => "required|array",
         "game_id" => "required|integer",
-        "first_crossing" => "required|string",
-        "second_crossing" => "required|string",
-        "points" => "required|integer",
     ]);
 
-    // Extract numbers as an array
-    $numbers = explode(',', $request->input('numbers'));
-    $firstCrossing = $request->input('first_crossing');
-    $secondCrossing = $request->input('second_crossing');
+    // Get the jodi array and remove null values
+    $jodi = $request->input('jodi');
+    $filteredJodi = array_filter($jodi, function ($value) {
+        return !is_null($value); // Remove null values
+    });
 
-    // Include first and second crossing numbers if not already in array
-    if (!in_array($firstCrossing, $numbers)) {
-        $numbers[] = $firstCrossing;
-    }
-    if (!in_array($secondCrossing, $numbers)) {
-        $numbers[] = $secondCrossing;
-    }
+    // Calculate the total amount
+    $totalAmount = array_sum($filteredJodi);
 
-    // Calculate total amount
-    $pointsPerNumber = $request->input('points');
-    $totalAmount = count($numbers) * $pointsPerNumber;
-
-    // Get user
+    // Get user_id and user data
     $user = Auth::user();
 
-    // Check wallet balance
+    // Check if user has sufficient balance
     if ($user->wallet_balance < $totalAmount) {
         return redirect()->route('play.page')->with('error', 'Insufficient wallet balance!');
     }
 
-    // Deduct amount from wallet
+    // Deduct the total amount from the user's wallet balance
     $user->wallet_balance -= $totalAmount;
     $user->save();
 
-    // Get game name
+    // Fetch the game name
     $game = GameModel::find($request->input('game_id'));
     $gameName = $game ? $game->name : "Unknown Game";
 
     // Save each bet in the database
     $game_id = $request->input('game_id');
-    foreach ($numbers as $number) {
+    foreach ($filteredJodi as $number => $amount) {
         BetModel::create([
             'user_id' => $user->id,
-            'bet_type' => "num_to_num",
+            'bet_type' => "tap-play",
             'game_id' => $game_id,
             'number' => $number,
-            'amount' => $pointsPerNumber,
+            'amount' => $amount,
             'status' => "pending",
         ]);
     }
 
-    // Redirect with success message
+    // Redirect to the play page with a success message, including total amount and game name
     return redirect()->route('play.page')->with(
         'success-bet',
-        "Your 'Number to Number' bets for '{$gameName}' have been placed successfully! Total Points: {$totalAmount}"
+        "Your bets for '{$gameName}' have been placed successfully! Total Points: {$totalAmount}"
     );
-}
 
+    }
 }

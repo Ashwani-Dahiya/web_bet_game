@@ -69,4 +69,13 @@ class PlayController extends Controller
         }
         return view("games.play-num-to-num", compact('game','active_nav'));
     }
+    public function play_tap_play($gameName)
+    {
+        $active_nav= 'tap-play';
+        $game = GameModel::where('name', $gameName)->with(['rates', 'results', 'timings'])->first();
+        if (!$game) {
+            abort(404);
+        }
+        return view("games.tap-play", compact('game','active_nav'));
+    }
 }

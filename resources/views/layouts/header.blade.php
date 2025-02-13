@@ -25,7 +25,7 @@
             top: 0;
             width: 100%;
             z-index: 1000;
-            background-color: #008cba;
+            background-color: rgba(38, 171, 248, 0.79);
             color: white;
         }
 
@@ -33,7 +33,7 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: #008cba;
+            background-color: rgba(38, 171, 248, 0.79);
             color: white;
             text-align: center;
             padding: 10px 0;
@@ -61,28 +61,28 @@
         }
 
         .welcome-banner {
-            background-color: #008cba;
+            background-color: rgba(38, 171, 248, 0.79);
         }
 
         .info-box {
-            background-color: #008cba;
+            background-color: rgba(38, 171, 248, 0.79);
         }
 
         .result-box {
-            background-color: #008cba;
+            background-color: rgba(38, 171, 248, 0.79);
         }
 
         .click-link-box {
-            background-color: #008cba;
+            background-color: rgba(38, 171, 248, 0.79);
         }
 
         /* Offcanvas styles */
         .offcanvas {
-            background-color: #008cba;
+            background-color: rgba(38, 171, 248, 0.79);
         }
 
         .offcanvas-header {
-            background-color: #008cba;
+            background-color: rgba(38, 171, 248, 0.79);
             color: white;
             padding: 1rem;
         }
@@ -158,6 +158,9 @@
             font-size: 1.5rem;
             margin-bottom: 5px;
         }
+        .lst-result{
+            color: rgb(0, 0, 0) !important;;
+        }
     </style>
 </head>
 <body>
@@ -198,28 +201,28 @@
         <div class="offcanvas-body">
             <button class="edit-profile-btn">Edit Profile</button>
             <ul class="menu-list">
-                <li class="menu-item-red">
+                <li >
                     <a href="#">
                         <i class="bi bi-file-text"></i>
                         Bonus Report
                         <small class="ms-2">अपनी गेम का कमीशन देखने के लिए यहाँ दबायें</small>
                     </a>
                 </li>
-                <li class="menu-item-green">
+                <li >
                     <a href="{{ route('play.history') }}">
                         <i class="bi bi-clock-history"></i>
                         My Play History
                         <small class="ms-2">अपनी खेली हुई गेम देखने के लिए यहाँ दबाये</small>
                     </a>
                 </li>
-                <li class="menu-item-green">
+                <li >
                     <a href="#">
                         <i class="bi bi-table"></i>
                         Result History
                         <small class="ms-2">गेम के रिजल्ट देखने के लिए यहाँ दबायें</small>
                     </a>
                 </li>
-                <li class="menu-item-red">
+                <li >
                     <a href="#">
                         <i class="bi bi-file-text"></i>
                         Terms and Condition
@@ -247,20 +250,7 @@
                     </a>
                 </li>
             </ul>
-            <!-- <div class="social-links">
-                <a href="#" class="text-center">
-                    <i class="bi bi-chat-dots-fill text-danger"></i><br>
-                    हमसे बात करने के लिए<br>यहाँ पे क्लिक करें
-                </a>
-                <a href="#" class="text-center">
-                    <i class="bi bi-facebook text-primary"></i><br>
-                    सोशल गेम के लिए हमारा<br>फेसबुक पेज जॉइन करें
-                </a>
-                <a href="#" class="text-center">
-                    <i class="bi bi-instagram text-danger"></i><br>
-                    इंस्टाग्राम पर जाने के<br>लिए क्लिक करें
-                </a>
-            </div> -->
+
         </div>
     </div>
 @yield('content')

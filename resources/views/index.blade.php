@@ -53,11 +53,63 @@
             लगा सकते है गेम खेलना सीखने के लिए आप नीचे हेल्प(help) वाले<br>
             बटन पर क्लिक करे
         </div>
+        <div class="live-result-header text-center text-white p-3">
+            Shree Shyam Matka Live Result of 2025-01-21
+        </div>
+        <div class="result-section d-flex justify-content-between align-items-center p-3 mb-3 bg-light">
+            <div class="old-result text-center">
+                <span class="badge bg-danger">51</span>
+                <div class="lst-result">OLD</div>
+            </div>
+            <div class="result-info text-center">
+                <div class="latest-result badge bg-primary">Latest Result</div>
+                <div class="market-name lst-result">DISAWAR</div>
+                <div class="result-time lst-result">5:00AM</div>
+                <div class="result-date lst-result">10-08-2024</div>
+            </div>
+            <div class="new-result text-center">
+                <span class="badge bg-success">51</span>
+                <div class="lst-result">NEW</div>
+            </div>
+        </div>
+
+        <div class="today-results d-flex flex-wrap justify-content-around p-3 mb-3">
+            @php
+    $bgColors = ['bg-success', 'bg-danger', 'bg-warning', 'bg-info', 'bg-primary', 'bg-dark'];
+@endphp
+
+@php
+    $bgColors = ['bg-success', 'bg-danger', 'bg-warning', 'bg-info', 'bg-primary', 'bg-dark'];
+    $colorIndex = 0;
+@endphp
+
+@foreach ($games as $game)
+    <div class="result-card {{ $bgColors[$colorIndex] }} text-white text-center p-3 col-md-5 col-5 mb-3">
+        <div class="market-name">{{ $game->name }}</div>
+        <div class="result-time">
+            {{ $game->timings && $game->result_time
+                ? \Carbon\Carbon::createFromFormat('H:i:s', $game->result_time)->format('h:i A')
+                : 'N/A' }}
+        </div>
+        <div class="old-result">
+            {{ $game->results->where('result_date', \Carbon\Carbon::yesterday()->format('Y-m-d'))->first()->jodi_number ?? 'XX' }} OLD
+        </div>
+        <div class="new-result">
+            {{ $game->results->where('result_date', \Carbon\Carbon::today()->format('Y-m-d'))->first()->jodi_number ?? 'XX' }} NEW
+        </div>
+    </div>
+
+    @php
+        // अगले रंग पर जाने के लिए इंडेक्स बढ़ाएं, और अगर ऐरे खत्म हो जाए तो फिर से 0 पर जाएं
+        $colorIndex = ($colorIndex + 1) % count($bgColors);
+    @endphp
+@endforeach
+
+
+        </div>
+
 
         <div class="live-result-section mb-3">
-            <div class="live-result-header text-center text-white p-3">
-                Shree Shyam Matka Live Result of 2025-01-21
-            </div>
 
             <div class="market-header d-flex justify-content-between text-white p-3">
                 <div>Market Name/Time</div>
