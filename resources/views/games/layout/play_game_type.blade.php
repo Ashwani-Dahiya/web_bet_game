@@ -332,7 +332,7 @@
                 </a>
                 <a href="{{ route('play.copy', ['gameName' => $game->name]) }}" class="game-button ">
                     <span class="status-dot gray"></span>
-                    Play Copy Page
+                    Play Copy Paste
                 </a>
                 <a href="{{ route('play.tap-play', ['gameName' => $game->name]) }}" class="game-button ">
                     <span class="status-dot gray"></span>

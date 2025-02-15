@@ -25,7 +25,7 @@
             transition: all 0.3s ease;
         }
 
-        .quick-amounts input[type="radio"]:checked + label {
+        .quick-amounts input[type="radio"]:checked+label {
             background-color: #00a3d3;
             color: white;
             border-color: #00a3d3;
@@ -80,7 +80,6 @@
 
     <!-- Tab Contents -->
     <div class="tab-content">
-        <!-- Jodi Tab Content -->
         <div class="show active" id="jodi-tab" role="tabpanel" aria-labelledby="jodi-tab-btn">
             <form action="{{ route('place-bet-tap-play') }}" method="POST">
                 @csrf
@@ -89,7 +88,8 @@
                 <div class="number-grid">
                     <div class="quick-amounts">
                         @for ($i = 10; $i <= 100; $i += 10)
-                            <input type="radio" name="amount" value="{{ $i }}" id="amount{{ $i }}" class="points-amount">
+                            <input type="radio" name="amount" value="{{ $i }}" id="amount{{ $i }}"
+                                class="points-amount">
                             <label for="amount{{ $i }}">{{ $i }}</label>
                         @endfor
                     </div>
@@ -108,93 +108,103 @@
                         <button type="button" class="btn btn-reset btn-warning">Reset</button>
                     </div>
                 </div>
-
-                <script>
-                    $(document).ready(function() {
-                        // Get initial points from the span
-                        let points = parseInt($('#pointDisplay').text()) || 0;
-                        let selectedAmount = 0;
-
-                        // Handle radio button selection
-                        $('.points-amount').on('change', function() {
-                            selectedAmount = parseInt($(this).val());
-                        });
-
-                        // Handle number box clicks
-                        $('.number-box').on('click', function() {
-                            if (selectedAmount === 0) {
-                                alert('Please select an amount first');
-                                return;
-                            }
-
-                            let numberValue = $(this).find('.number-value');
-                            let inputField = $(this).find('.input-num');
-                            let currentValue = parseInt(numberValue.text()) || 0;
-                            let newValue = currentValue + selectedAmount;
-
-                            // Update both the displayed value and hidden input
-                            numberValue.text(newValue);
-                            inputField.val(newValue);
-
-                            // Update total points deduction
-                            updatePoints();
-                        });
-
-                        // Function to update points
-                        function updatePoints() {
-                            let totalDeduction = 0;
-
-                            $('.input-num').each(function() {
-                                let value = parseInt($(this).val()) || 0;
-                                if (value > 0) {
-                                    totalDeduction += value;
-                                }
-                            });
-
-                            // Update points added display
-                            $('#pointAddedDisplay').text(totalDeduction);
-
-                            // Calculate and update remaining points
-                            let remainingPoints = points - totalDeduction;
-                            if (remainingPoints < 0) {
-                                alert('Not enough points!');
-                                return false;
-                            }
-                            $('#pointDisplay').text(remainingPoints);
-                        }
-
-                        // Reset button functionality
-                        $('.btn-reset').on('click', function() {
-                            $('.number-value').text('0');
-                            $('.input-num').val('');
-                            updatePoints();
-                        });
-
-                        // Form submission handling
-                        $('form').on('submit', function(e) {
-                            e.preventDefault();
-
-                            // Check if any bets are placed
-                            let hasBets = false;
-                            $('.input-num').each(function() {
-                                if (parseInt($(this).val()) > 0) {
-                                    hasBets = true;
-                                    return false; // break the loop
-                                }
-                            });
-
-                            if (!hasBets) {
-                                alert('Please place at least one bet!');
-                                return false;
-                            }
-
-                            // If all checks pass, submit the form
-                            this.submit();
-                        });
-                    });
-                </script>
             </form>
         </div>
-
     </div>
+
+    <script>
+        $(document).ready(function() {
+            let points = parseInt($('#pointDisplay').text()) || 0;
+            let selectedAmount = 0;
+            let selectedNumbers = new Map();
+
+            // Handle radio button selection
+            $('.points-amount').on('change', function() {
+                selectedAmount = parseInt($(this).val());
+            });
+
+            // Handle number box clicks
+            $('.number-box').on('click', function() {
+                if (selectedAmount === 0) {
+                    alert('Please select an amount first');
+                    return;
+                }
+
+                let number = $(this).data('number');
+                let numberValue = $(this).find('.number-value');
+                let inputField = $(this).find('.input-num');
+                let currentValue = parseInt(numberValue.text()) || 0;
+                let newValue = currentValue + selectedAmount;
+
+                // Check if user is selecting more than 50 numbers
+                if (!selectedNumbers.has(number) && selectedNumbers.size >= 50) {
+                    alert("You cannot select more than 50 numbers!");
+                    return;
+                }
+
+                // If number is already selected, increase the amount
+                if (selectedNumbers.has(number)) {
+                    selectedNumbers.set(number, selectedNumbers.get(number) + selectedAmount);
+                } else {
+                    selectedNumbers.set(number, selectedAmount);
+                    $(this).addClass('selected');
+                }
+
+                numberValue.text(newValue);
+                inputField.val(newValue);
+
+                updatePoints();
+            });
+
+            // Function to update points
+            function updatePoints() {
+                let totalDeduction = 0;
+
+                $('.input-num').each(function() {
+                    let value = parseInt($(this).val()) || 0;
+                    if (value > 0) {
+                        totalDeduction += value;
+                    }
+                });
+
+                $('#pointAddedDisplay').text(totalDeduction);
+
+                let remainingPoints = points - totalDeduction;
+                if (remainingPoints < 0) {
+                    alert('Not enough points!');
+                    return false;
+                }
+                $('#pointDisplay').text(remainingPoints);
+            }
+
+            // Reset button functionality
+            $('.btn-reset').on('click', function() {
+                selectedNumbers.clear();
+                $('.number-box').removeClass('selected');
+                $('.number-value').text('0');
+                $('.input-num').val('');
+                updatePoints();
+            });
+
+            // Form submission handling
+            $('form').on('submit', function(e) {
+                e.preventDefault();
+
+                if (selectedNumbers.size === 0) {
+                    alert('Please select at least one number!');
+                    return false;
+                }
+
+                this.submit();
+            });
+        });
+    </script>
+
+    <style>
+        .number-box.selected {
+            background-color: rgb(154, 230, 255);
+            border: 2px solid #4bd1fe
+        }
+        .number-box.selected .number-value { color: #001dff; } 
+    </style>
 @endSection

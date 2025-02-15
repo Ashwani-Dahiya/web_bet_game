@@ -62,49 +62,47 @@
                     </tbody>
                 </table>
             </div>
-            <button type="submit" class="btn btn-play">Place bet</button>
+            <button type="submit" class="btn  btn-play btn-danger w-100">Place bet</button>
 
 
         </div>
     </form>
     </div>
 
-   <script>
+  <script>
     $(document).ready(function() {
     let initialWalletPoints = parseInt($('#pointDisplay').text()) || 0;
     let walletPoints = initialWalletPoints;
     let addedJodis = []; // Store added Jodi numbers
+    let isAdded = false; // To check if add button was clicked
 
     // Handle radio button change
     $("input[name='platiOption']").change(function() {
-        resetTable(); // Reset the table when user switches plati option
+        resetTable();
     });
 
     $("#add-btn").click(function(event) {
         event.preventDefault(); // 🔹 Form Submit होने से रोकें
-
-        resetTable(); // जब भी Add करें, पहले टेबल Reset करें
+        isAdded = true; // User ने add किया है
 
         let jodiNumber = $("#jodi-number").val().trim();
         let points = parseFloat($("#points").val()) || 0;
         let isWithPlati = $("#withPlati").is(":checked");
 
-        // 🔹 Check if inputs are empty
+        // 🔹 इनपुट वैलिडेशन
         if (jodiNumber === "" || points === 0) {
             alert("Please enter both Jodi Number and Points.");
             return;
         }
 
-        // 🔹 Validate Jodi Number Length
         if (jodiNumber.length % 2 !== 0) {
             alert("Please enter valid Jodi numbers (even digit numbers like 145678)");
             return;
         }
 
-        // Split number into jodi pairs
         let jodiPairs = jodiNumber.match(/.{1,2}/g) || [];
-
         let totalDeductPoints = 0;
+
         jodiPairs.forEach(num => {
             if (!addedJodis.includes(num)) {
                 addedJodis.push(num);
@@ -122,14 +120,9 @@
             }
         });
 
-        // 🛠 Array को JSON में Convert करें
         $("#jodi-numbers-aaray").val(JSON.stringify(addedJodis));
-
-        // Deduct points from wallet
         walletPoints -= totalDeductPoints;
         $("#pointDisplay").text(walletPoints);
-
-        // Update total added points
         updateTotalPoints();
     });
 
@@ -145,20 +138,16 @@
         $("#jodi-table-body").append(row);
     }
 
-    // Handle row deletion
     $(document).on("click", ".delete-btn", function() {
         let numberToDelete = $(this).data("number");
         let pointsToRefund = parseFloat($(this).data("points"));
 
-        // Remove from array
         addedJodis = addedJodis.filter(num => num !== numberToDelete);
         $("#jodi-numbers-aaray").val(JSON.stringify(addedJodis));
 
-        // Refund points to wallet
         walletPoints += pointsToRefund;
         $("#pointDisplay").text(walletPoints);
 
-        // Remove row and update total points
         $(this).closest("tr").remove();
         updateTotalPoints();
     });
@@ -171,16 +160,31 @@
         $("#pointAddedDisplay").text(totalPoints);
     }
 
-    // Reset table when user switches plati option OR when add-btn is clicked again
     function resetTable() {
-        $("#jodi-table-body").empty(); // Clear the table
-        addedJodis = []; // Reset array
-        $("#jodi-numbers-aaray").val(""); // Clear input field
-        walletPoints = initialWalletPoints; // Reset wallet points
+        $("#jodi-table-body").empty();
+        addedJodis = [];
+        $("#jodi-numbers-aaray").val("");
+        walletPoints = initialWalletPoints;
         $("#pointDisplay").text(walletPoints);
-        $("#pointAddedDisplay").text("0"); // Reset added points
+        $("#pointAddedDisplay").text("0");
+        isAdded = false;
     }
+
+    // **Form Validation Before Submit**
+    $("form").submit(function(event) {
+        if (!isAdded) {
+            alert("Please click the Add button before placing your bet.");
+            event.preventDefault();
+            return false;
+        }
+
+        if ($("#jodi-table-body tr").length === 0) {
+            alert("Please add at least one Jodi before placing your bet.");
+            event.preventDefault();
+            return false;
+        }
+    });
 });
 
-   </script>
+  </script>
 @endSection

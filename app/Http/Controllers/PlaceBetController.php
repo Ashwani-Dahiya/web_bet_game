@@ -15,7 +15,9 @@ class PlaceBetController extends Controller
             "jodi" => "required|array",
             "game_id" => "required|integer",
         ]);
-
+        $date = date('d-m-Y');
+        $join_bets="jodi/".$date;
+        // dd($join_bets);
         // Get the jodi array and remove null values
         $jodi = $request->input('jodi');
         $filteredJodi = array_filter($jodi, function ($value) {
@@ -51,6 +53,7 @@ class PlaceBetController extends Controller
                 'number' => $number,
                 'amount' => $amount,
                 'status' => "pending",
+                'join_bets' => $join_bets."/".$amount,
             ]);
         }
 
@@ -66,7 +69,8 @@ class PlaceBetController extends Controller
         $request->validate([
             "game_id" => "required|integer",
         ]);
-
+        $date = date('d-m-Y');
+        $join_bets="jodi-manual/".$date;
 
         // Filter out null values from the request data
         $filteredData = array_filter($request->all(), function ($value) {
@@ -128,6 +132,7 @@ class PlaceBetController extends Controller
                 'number' => $bet['number'],
                 'amount' => $bet['amount'],
                 'status' => 'pending',
+                'join_bets' => $join_bets."/".$bet['amount'],
             ]);
         }
 
@@ -149,6 +154,7 @@ class PlaceBetController extends Controller
         // Initialize arrays to store "Andar" and "Bahar" bets
         $andarBets = [];
         $baharBets = [];
+        $date = date('d-m-Y');
 
         // Loop through the filtered data to identify "Andar" and "Bahar" bets
         foreach ($filteredData as $key => $value) {
@@ -204,6 +210,7 @@ class PlaceBetController extends Controller
 
         // Save each bet in the database
         foreach ($andarBets as $bet) {
+            $join_bets="andar/".$date;
             BetModel::create([
                 'user_id' => $user->id,
                 'bet_type' => 'andar', // Bet type
@@ -211,10 +218,12 @@ class PlaceBetController extends Controller
                 'number' => $bet['number'],
                 'amount' => $bet['amount'],
                 'status' => 'pending',
+                'join_bets' => $join_bets."/".$bet['amount'],
             ]);
         }
 
         foreach ($baharBets as $bet) {
+            $join_bets="bahar/".$date;
             BetModel::create([
                 'user_id' => $user->id,
                 'bet_type' => 'bahar', // Bet type
@@ -222,6 +231,7 @@ class PlaceBetController extends Controller
                 'number' => $bet['number'],
                 'amount' => $bet['amount'],
                 'status' => 'pending',
+                'join_bets' => $join_bets."/".$bet['amount'],
             ]);
         }
 
@@ -239,7 +249,8 @@ class PlaceBetController extends Controller
             "game_id" => "required|integer",
             "points" => "required|integer",
         ]);
-
+        $date = date('d-m-Y');
+        $join_bets="crossing/".$date;
         // Extract crossed numbers as an array
         $crossedNumbers = explode(',', $request->input('crossed_numbers'));
 
@@ -273,6 +284,7 @@ class PlaceBetController extends Controller
                 'number' => $number,
                 'amount' => $pointsPerNumber,
                 'status' => "pending",
+                'join_bets' => $join_bets."/".$pointsPerNumber,
             ]);
         }
 
@@ -293,6 +305,8 @@ class PlaceBetController extends Controller
             "point" => "required|integer",
         ]);
         // dd($request->all()) ;
+        $date = date('d-m-Y');
+        $join_bets="copy_paste/".$date;
 
         // ✅ Extract jodi numbers from request (Fixing the issue)
         $jodiNumbersJson = $request->input('jodi_numbers')[0] ?? null;
@@ -335,6 +349,7 @@ class PlaceBetController extends Controller
                 'number' => $number,
                 'amount' => $pointsPerNumber,
                 'status' => "pending",
+                'join_bets' => $join_bets."/".$pointsPerNumber,
             ]);
         }
 
@@ -355,7 +370,8 @@ class PlaceBetController extends Controller
             "second_crossing" => "required|string",
             "points" => "required|integer",
         ]);
-
+        $date = date('d-m-Y');
+        $join_bets="num_to_num/".$date;
         // Extract numbers as an array
         $numbers = explode(',', $request->input('numbers'));
         $firstCrossing = $request->input('first_crossing');
@@ -399,6 +415,7 @@ class PlaceBetController extends Controller
                 'number' => $number,
                 'amount' => $pointsPerNumber,
                 'status' => "pending",
+                'join_bets' => $join_bets."/".$pointsPerNumber,
             ]);
         }
 
@@ -415,7 +432,8 @@ class PlaceBetController extends Controller
         "jodi" => "required|array",
         "game_id" => "required|integer",
     ]);
-
+    $date = date('d-m-Y');
+    $join_bets="tap-play/".$date;
     // Get the jodi array and remove null values
     $jodi = $request->input('jodi');
     $filteredJodi = array_filter($jodi, function ($value) {
@@ -451,6 +469,7 @@ class PlaceBetController extends Controller
             'number' => $number,
             'amount' => $amount,
             'status' => "pending",
+            'join_bets' => $join_bets."/".$amount,
         ]);
     }
 

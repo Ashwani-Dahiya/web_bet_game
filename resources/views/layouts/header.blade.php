@@ -171,15 +171,22 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <span class="navbar-brand">Home</span>
+                {{-- <span class="navbar-brand">Home</span> --}}
                 <div class="d-flex align-items-center">
                     <div class="point-display me-2">Point: <span id="pointDisplay">{{ Auth::user()->wallet_balance }}</span></div>
-                    <button class="btn btn-danger me-2">
+                    <button class="btn btn-danger me-2" id="refreshBtn">
                         <i class="bi bi-arrow-clockwise"></i> Refresh
                     </button>
+
+                    <script>
+                        document.getElementById("refreshBtn").addEventListener("click", function() {
+                            location.reload(); // ✅ Page reload करेगा
+                        });
+                    </script>
+
                     <a href="{{ route('notifications.page') }}" class="notification-icon position-relative">
                         <i class="bi bi-bell-fill text-white fs-5"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">1</span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ $notification_count }}</span>
                     </a>
                 </div>
             </div>

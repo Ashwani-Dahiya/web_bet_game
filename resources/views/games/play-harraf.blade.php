@@ -55,81 +55,83 @@
                             </div>
                         @endfor
                     </div>
-                    <button type="submit" class="btn btn-play">Place bet</button>
+                    <button type="submit" class="btn btn-play btn-danger col-12 mt-3">Place bet</button>
                 </div>
             </form>
         </div>
 
-        <!-- jQuery Validation Script -->
-        <script>
-            $(document).ready(function() {
-                $('#harraf-form').on('submit', function(event) {
-                    // Get all input fields in the form
-                    let valid = false; // Flag to check if at least one valid input exists
-                    $('.harraf-input').each(function() {
-                        const value = $(this).val();
-                        if (value && !isNaN(value) && Number(value) > 0) {
-                            valid = true; // Set the flag to true if a valid input is found
-                        }
-                    });
 
-                    // Check if the form is valid
-                    if (!valid) {
-                        event.preventDefault(); // Prevent form submission
-                        alert('Please enter at least one positive number in the form.');
-                        return false;
-                    }
-                });
+    </div>
+    <script>
+        $(document).ready(function() {
+    // Get initial points from the span
+    let points = parseInt($('#pointDisplay').text()) || 0;
 
-                // Prevent negative numbers in input fields
-                $('.harraf-input').on('input', function() {
-                    const value = $(this).val();
-                    if (value < 0) {
-                        $(this).val(''); // Clear the input if the value is negative
-                        alert('Negative numbers are not allowed.');
-                    }
-                });
-            });
-        </script>
-
-<script>
-    $(document).ready(function() {
-        // Get initial points from the span
-        let points = parseInt($('#pointDisplay').text()) || 0;
-
-        // Function to update points
-        function updatePoints() {
-            let totalDeduction = 0;
-
-            $('.input-num').each(function() {
-                let value = parseInt($(this).val()) || 0;
-
-                // Ensure value is positive
-                if (value > 0) {
-                    totalDeduction += value;
-                } else {
-                    $(this).val(''); // Reset negative or invalid inputs
-                }
-            });
-
-            // Calculate new points
-            let newPoints = points - totalDeduction;
-
-            // Validation to ensure points don't go negative
-            if (newPoints >= 0) {
-                $('#pointDisplay').text(newPoints);
-                $('#pointAddedDisplay').text(totalDeduction);
-            } else {
-                alert("You cannot deduct more than available points!");
-                $('.input-num').val(''); // Reset inputs
+    function countSelectedInputs(selector) {
+        let count = 0;
+        $(selector).each(function() {
+            if ($(this).val().trim() !== '') {
+                count++;
             }
+        });
+        return count;
+    }
+
+    $('.input-num').on('input', function() {
+        let isAnderInput = $(this).attr('name').startsWith('ander');
+        let isBaharInput = $(this).attr('name').startsWith('bahar');
+
+        let anderCount = countSelectedInputs('.input-num[name^="ander"]');
+        let baharCount = countSelectedInputs('.input-num[name^="bahar"]');
+
+        if ((isAnderInput && anderCount > 5) || (isBaharInput && baharCount > 5)) {
+            alert("आप केवल 5 अन्दर और 5 बाहर नंबर ही डाल सकते हैं!");
+            $(this).val('');
+            return;
         }
 
-        // Trigger update on input change
-        $('.input-num').on('input', function() {
-            updatePoints();
-        });
+        updatePoints();
     });
-</script>
-    </div>
+
+    function updatePoints() {
+        let totalDeduction = 0;
+        $('.input-num').each(function() {
+            let value = parseInt($(this).val()) || 0;
+            if (value > 0) {
+                totalDeduction += value;
+            } else {
+                $(this).val('');
+            }
+        });
+
+        let newPoints = points - totalDeduction;
+        if (newPoints >= 0) {
+            $('#pointDisplay').text(newPoints);
+            $('#pointAddedDisplay').text(totalDeduction);
+        } else {
+            alert("आपके पास पर्याप्त पॉइंट्स नहीं हैं!");
+            $('.input-num').val('');
+        }
+    }
+
+    $('#harraf-form').on('submit', function(event) {
+        let anderCount = countSelectedInputs('.input-num[name^="ander"]');
+        let baharCount = countSelectedInputs('.input-num[name^="bahar"]');
+
+        if (anderCount > 5 || baharCount > 5) {
+            alert("आप अधिकतम 5 अन्दर और 5 बाहर नंबर ही डाल सकते हैं!");
+            event.preventDefault();
+            return false;
+        }
+
+        let valid = anderCount > 0 || baharCount > 0;
+        if (!valid) {
+            alert('कृपया कम से कम एक अन्दर या बाहर नंबर दर्ज करें।');
+            event.preventDefault();
+            return false;
+        }
+    });
+});
+
+    </script>
 @endSection

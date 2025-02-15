@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                         @endfor
-                        <button type="submit" class="btn btn-play">Place bet</button>
+                        <button type="submit" class="btn btn-play btn-danger">Place bet</button>
                     </div>
 
 
@@ -55,41 +55,78 @@
 
     <script>
         $(document).ready(function() {
-            // Get initial points from the span
-            let points = parseInt($('#pointDisplay').text()) || 0;
+    let points = parseInt($('#pointDisplay').text()) || 0;
+    let maxJodiLimit = 50; // Jodi limit set to 50
 
-            // Function to update points
-            function updatePoints() {
-                let totalDeduction = 0;
+    function validateForm() {
+        let totalDeduction = 0;
+        let selectedJodis = 0;
+        let isAnyFilled = false;
 
-                $('.input-num').each(function() {
-                    let value = parseInt($(this).val()) || 0;
+        $('.input-num').each(function() {
+            let value = parseInt($(this).val()) || 0;
 
-                    // Ensure value is positive
-                    if (value > 0) {
-                        totalDeduction += value;
-                    } else {
-                        $(this).val(''); // Reset negative or invalid inputs
-                    }
-                });
-
-                // Calculate new points
-                let newPoints = points - totalDeduction;
-
-                // Validation to ensure points don't go negative
-                if (newPoints >= 0) {
-                    $('#pointDisplay').text(newPoints);
-                    $('#pointAddedDisplay').text(totalDeduction);
-                } else {
-                    alert("You cannot deduct more than available points!");
-                    $('.input-num').val(''); // Reset inputs
-                }
+            if (value > 0) {
+                isAnyFilled = true;
+                totalDeduction += value;
+                selectedJodis++;
             }
-
-            // Trigger update on input change
-            $('.input-num').on('input', function() {
-                updatePoints();
-            });
         });
+
+        if (!isAnyFilled) {
+            alert("कम से कम एक नंबर भरना अनिवार्य है!");
+            return false;
+        }
+
+        if (selectedJodis > maxJodiLimit) {
+            alert(`आप केवल ${maxJodiLimit} जोड़ी तक ही बेट कर सकते हैं!`);
+            return false;
+        }
+
+        if (totalDeduction > points) {
+            alert("आपके पास पर्याप्त बैलेंस नहीं है!");
+            return false;
+        }
+
+        return true;
+    }
+
+    // Prevent form submission if validation fails
+    $("form").submit(function(event) {
+        if (!validateForm()) {
+            event.preventDefault(); // Stop form submission
+        }
+    });
+
+    $(".input-num").on("input", function() {
+        let totalDeduction = 0;
+        let selectedJodis = 0;
+
+        $(".input-num").each(function() {
+            let value = parseInt($(this).val()) || 0;
+
+            if (value > 0) {
+                totalDeduction += value;
+                selectedJodis++;
+            }
+        });
+
+        if (selectedJodis > maxJodiLimit) {
+            alert(`आप केवल ${maxJodiLimit} जोड़ी तक ही बेट कर सकते हैं!`);
+            $(this).val(''); // Reset last input
+        }
+
+        let newPoints = points - totalDeduction;
+
+        if (newPoints >= 0) {
+            $("#pointDisplay").text(newPoints);
+            $("#pointAddedDisplay").text(totalDeduction);
+        } else {
+            alert("आपके पास पर्याप्त बैलेंस नहीं है!");
+            $(this).val(''); // Reset last input
+        }
+    });
+});
+
     </script>
 @endSection

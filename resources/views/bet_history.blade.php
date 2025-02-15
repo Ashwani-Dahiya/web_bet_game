@@ -35,30 +35,55 @@
                     <tr>
                         <th>S.No</th>
                         <th>Date</th>
-                        <th>Name</th>
-                        <th>Type</th>
+                        <th >Type</th>
                         <th>Number</th>
                         <th>Points</th>
+                        <th>Total</th>
                         <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if (isset($bets) && $bets->count() > 0)
-                        @foreach ($bets as $index => $bet)
+                        @php
+                            $i = 0;
+                        @endphp
+                        @foreach ($bets as $group_key => $bet_group)
+                           @php
+                            $i++;
+                           @endphp
                             <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ optional($bet->created_at)->format('d-m-Y') }}</td> {{-- यदि date कॉलम नहीं है तो created_at --}}
-                                <td>{{ optional($bet->game)->name ?? 'N/A' }}</td> {{-- गेम न मिले तो N/A दिखाए --}}
-                                <td>{{ $bet->bet_type }}</td>
-                                <td>{{ $bet->number }}</td>
-                                <td>{{ $bet->amount }}</td>
-                                @if ($bet->status == 'win')
-                                    <td><span class="badge bg-success">{{ $bet->status }}</span></td>
-                                @elseif($bet->status == 'lost')
-                                    <td><span class="badge bg-danger">{{ $bet->status }}</span></td>
-                                @else
-                                    <td><span class="badge bg-info">{{ $bet->status }}</span></td>
-                                @endif
+                                <td>{{ $i }}</td>
+                                <td>{{ \Carbon\Carbon::parse($bet_group['bets'][0]['created_at'])->format('d/m/y') }}</td>
+
+
+                                <td >
+                                    {{ $bet_group['bets'][0]['bet_type'] }}
+                                </td>
+                                <td >
+                                    @php
+                                        $numbers = collect($bet_group['bets'])->pluck('number')->toArray();
+                                    @endphp
+
+                                    {!! implode(',', array_map(function ($num, $index) {
+                                        return (($index + 1) % 5 == 0) ? $num . '<br>' : $num;
+                                    }, $numbers, array_keys($numbers))) !!}
+                                </td>
+
+                                <td>
+                                    {{ $bet_group['bets'][0]['amount'] ?? 'N/A' }}
+                                </td>
+                                <td>
+                                    {{ $bet_group['total_amount'] }}
+                                </td>
+                                <td>
+                                    @if ($bet_group['bets'][0]['status'] == 'win')
+                                        <span class="badge bg-success">{{ $bet_group['bets'][0]['status'] }}</span>
+                                    @elseif($bet_group['bets'][0]['status'] == 'lost')
+                                        <span class="badge bg-danger">{{ $bet_group['bets'][0]['status'] }}</span>
+                                    @else
+                                        <span class="badge bg-info">{{ $bet_group['bets'][0]['status'] }}</span>
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     @else
@@ -67,9 +92,10 @@
                         </tr>
                     @endif
 
+
+
                 </tbody>
             </table>
-        </div>
         </div>
     </main>
     <style>
@@ -93,12 +119,15 @@
         .content-wrapper {
             padding: 5px;
         }
+        td{
+            font-size: 14px;
+        }
     </style>
 
 
-<script>
-    $(document).ready(function () {
-    $('#filter-bet-history-form').on('change', 'input, select', function (e) {
+    <script>
+        $(document).ready(function() {
+    $('#filter-bet-history-form').on('change', 'input, select', function(e) {
         e.preventDefault();
 
         let formData = {
@@ -112,37 +141,49 @@
             method: "POST",
             data: formData,
             dataType: "json",
-            success: function (response) {
+            success: function(response) {
                 let tbody = $('tbody');
                 tbody.empty(); // पहले से मौजूद डेटा हटाएँ
 
-                if (response.bets.length > 0) {
-                    $.each(response.bets, function (index, bet) {
-                        let statusClass = bet.status === 'win' ? 'bg-success' :
-                                          bet.status === 'lost' ? 'bg-danger' : 'bg-info';
+                if (Object.keys(response.bets).length > 0) {
+                    let i = 0;
+
+                    $.each(response.bets, function(groupKey, betGroup) {
+                        i++;
+                        let firstBet = betGroup.bets[0]; // पहले bet को अलग निकालें
+
+                        let statusClass = firstBet.status === 'win' ? 'bg-success' :
+                            firstBet.status === 'lost' ? 'bg-danger' : 'bg-info';
+
+                        // Numbers को group करके दिखाने के लिए processing
+                        let numbers = betGroup.bets.map(b => b.number);
+                        let formattedNumbers = numbers.map((num, index) => {
+                            return ((index + 1) % 5 === 0) ? num + '<br>' : num;
+                        }).join(',');
 
                         let row = `<tr>
-                            <td>${index + 1}</td>
-                            <td>${bet.date}</td>
-                            <td>${bet.game_name}</td>
-                            <td>${bet.bet_type}</td>
-                            <td>${bet.number}</td>
-                            <td>${bet.amount}</td>
-                            <td><span class="badge ${statusClass}">${bet.status}</span></td>
+                            <td>${i}</td>
+                            <td>${firstBet.date}</td>
+                            <td>${firstBet.bet_type}</td>
+                            <td>${formattedNumbers}</td>
+                            <td>${firstBet.amount ?? 'N/A'}</td>
+                            <td>${betGroup.total_amount}</td>
+                            <td><span class="badge ${statusClass}">${firstBet.status}</span></td>
                         </tr>`;
 
                         tbody.append(row);
                     });
+
                 } else {
                     tbody.html('<tr><td colspan="7" class="text-center">No Data Found</td></tr>');
                 }
             },
-            error: function () {
+            error: function() {
                 alert("Something went wrong! Please try again.");
             }
         });
     });
 });
 
-</script>
+    </script>
 @endsection

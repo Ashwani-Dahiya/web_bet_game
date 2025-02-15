@@ -59,5 +59,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/wallet', [WalletController::class, 'wallet'])->name('wallet.page');
     Route::get('/notifications', [NotificationController::class, 'notifications'])->name('notifications.page');
+    Route::get('/get-notification-count', [NotificationController::class, 'get_notification_count'])->name('get-notification-count');
 
 });

@@ -54,8 +54,9 @@
             बटन पर क्लिक करे
         </div>
         <div class="live-result-header text-center text-white p-3">
-            Shree Shyam Matka Live Result of 2025-01-21
+            Shree Shyam Matka Live Result of {{ \Carbon\Carbon::now()->format('d-m-Y') }}
         </div>
+
         <div class="result-section d-flex justify-content-between align-items-center p-3 mb-3 bg-light">
             <div class="old-result text-center">
                 <span class="badge bg-danger">51</span>
@@ -63,6 +64,18 @@
             </div>
             <div class="result-info text-center">
                 <div class="latest-result badge bg-primary">Latest Result</div>
+                <style>
+                    @keyframes blink {
+                        0% { opacity: 1; }
+                        25% { opacity: 0.8; }
+                        50% { opacity: 0.6; }
+                        100% { opacity: 1; }
+                    }
+
+                    .latest-result {
+                        animation: blink 1s infinite; /* हर 1 सेकंड में ब्लिंक करेगा */
+                    }
+                </style>
                 <div class="market-name lst-result">DISAWAR</div>
                 <div class="result-time lst-result">5:00AM</div>
                 <div class="result-date lst-result">10-08-2024</div>

@@ -9,7 +9,7 @@ class BetModel extends Model
 {
     use HasFactory;
     protected $table = 'bets';
-    protected $fillable = ['user_id', 'game_id', 'bet_type', 'number', 'amount', 'status'];
+    protected $fillable = ['user_id', 'game_id', 'bet_type', 'number', 'amount', 'status','join_bets'];
 
 
     public function user()

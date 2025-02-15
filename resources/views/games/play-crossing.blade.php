@@ -88,109 +88,103 @@
         </div>
     </div>
 
-    <script>
-        $(document).ready(function() {
-            let totalPoints = 0;
-            let walletPoints = parseInt($('#pointDisplay').text()) || 0;
+  <script>
+    $(document).ready(function() {
+    let totalPoints = 0;
+    let walletPoints = parseInt($('#pointDisplay').text()) || 0;
+    let addedJodis = new Set(); // Store unique Jodi numbers
+    let isAdded = false; // To track if Add button was clicked
 
-            // Function to generate all jodi combinations
-            function generateJodis(numbers1, numbers2) {
-                let jodis = [];
-                for (let i = 0; i < numbers1.length; i++) {
-                    for (let j = 0; j < numbers2.length; j++) {
-                        jodis.push(numbers1[i] + numbers2[j]);
-                    }
-                }
-                return jodis;
-            }
-
-            // Update hidden input with the jodis array
-            function updateHiddenInput(jodis) {
-                $("#crossed-numbers").val(jodis.join(",")); // Store as a comma-separated string
-            }
-
-            // Function to update wallet points and deducted points
-            function updatePointsDisplay() {
-                let newWalletPoints = walletPoints - totalPoints;
-
-                if (newWalletPoints >= 0) {
-                    $('#pointDisplay').text(newWalletPoints);
-                    $('#pointAddedDisplay').text(totalPoints);
-                    $('#total-points').text(totalPoints);
-                } else {
-                    alert("You cannot deduct more than available points!");
+    function generateJodis(numbers1, numbers2) {
+        let jodis = [];
+        for (let i = 0; i < numbers1.length; i++) {
+            for (let j = 0; j < numbers2.length; j++) {
+                let jodi = numbers1[i] + numbers2[j];
+                if (!addedJodis.has(jodi)) { // Ensure uniqueness
+                    jodis.push(jodi);
+                    addedJodis.add(jodi);
                 }
             }
+        }
+        return jodis;
+    }
 
-            // Add button click handler
-            $("#add-btn").click(function() {
-                const firstInput = $("#first-crossing").val().trim();
-                const secondInput = $("#second-crossing").val().trim();
-                const points = parseInt($("#points-input").val().trim(), 10);
+    function updateHiddenInput() {
+        $("#crossed-numbers").val([...addedJodis].join(","));
+    }
 
-                // Validation: Ensure inputs are not empty and points are valid
-                if (!firstInput || !secondInput || isNaN(points) || points <= 0) {
-                    alert("Please fill all fields correctly.");
-                    return;
-                }
+    function updatePointsDisplay() {
+        let newWalletPoints = walletPoints - totalPoints;
+        if (newWalletPoints >= 0) {
+            $('#pointDisplay').text(newWalletPoints);
+            $('#pointAddedDisplay').text(totalPoints);
+            $('#total-points').text(totalPoints);
+        } else {
+            alert("You cannot deduct more than available points!");
+        }
+    }
 
-                // Reset table and total points for fresh calculations
-                $("table tbody").empty();
-                totalPoints = 0;
+    $("#add-btn").click(function() {
+        isAdded = true;
+        const firstInput = $("#first-crossing").val().trim();
+        const secondInput = $("#second-crossing").val().trim();
+        const points = parseInt($("#points-input").val().trim(), 10);
 
-                // Generate jodi pairs for recalculation
-                const firstNumbers = firstInput.split("");
-                const secondNumbers = secondInput.split("");
-                const jodis = generateJodis(firstNumbers, secondNumbers);
+        if (!firstInput || !secondInput || isNaN(points) || points <= 0) {
+            alert("Please fill all fields correctly.");
+            return;
+        }
 
-                // Add new rows to the table for each crossing
-                jodis.forEach((jodi) => {
-                    $("table tbody").append(`
-                        <tr>
-                            <td>Crossing</td>
-                            <td>${jodi}</td>
-                            <td>${points}</td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
-                            </td>
-                        </tr>
-                    `);
-                });
+        const firstNumbers = firstInput.split("");
+        const secondNumbers = secondInput.split("");
+        const jodis = generateJodis(firstNumbers, secondNumbers);
 
-                // Update total points
-                totalPoints += jodis.length * points;
-                $("#total-points").text(totalPoints);
-
-                // Update the hidden input field with the generated jodis
-                updateHiddenInput(jodis);
-
-                // Update wallet points
-                updatePointsDisplay();
-            });
-
-            // Delete row handler
-            $(document).on("click", ".delete-btn", function() {
-                const row = $(this).closest("tr");
-                const points = parseInt(row.find("td:nth-child(3)").text(), 10);
-
-                // Deduct only if positive
-                if (!isNaN(points) && points > 0) {
-                    totalPoints -= points;
-                }
-
-                row.remove();
-
-                // Recalculate jodis and update hidden input after row deletion
-                const remainingJodis = [];
-                $("table tbody tr").each(function() {
-                    const jodi = $(this).find("td:nth-child(2)").text();
-                    remainingJodis.push(jodi);
-                });
-
-                updateHiddenInput(remainingJodis);
-                updatePointsDisplay();
-            });
+        jodis.forEach((jodi) => {
+            $("table tbody").append(`
+                <tr>
+                    <td>Crossing</td>
+                    <td>${jodi}</td>
+                    <td>${points}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm delete-btn" data-number="${jodi}" data-points="${points}">Delete</button>
+                    </td>
+                </tr>
+            `);
         });
-    </script>
 
+        totalPoints += jodis.length * points;
+        updateHiddenInput();
+        updatePointsDisplay();
+    });
+
+    $(document).on("click", ".delete-btn", function() {
+        const row = $(this).closest("tr");
+        const jodiToDelete = $(this).data("number");
+        const pointsToDeduct = parseInt($(this).data("points"), 10);
+
+        if (!isNaN(pointsToDeduct) && pointsToDeduct > 0) {
+            totalPoints -= pointsToDeduct;
+        }
+        addedJodis.delete(jodiToDelete);
+        row.remove();
+
+        updateHiddenInput();
+        updatePointsDisplay();
+    });
+
+    $("form").submit(function(event) {
+        if (!isAdded) {
+            alert("Please click the Add button before placing your bet.");
+            event.preventDefault();
+            return false;
+        }
+        if ($("#crossed-numbers").val() === "") {
+            alert("Please add at least one Jodi before placing your bet.");
+            event.preventDefault();
+            return false;
+        }
+    });
+});
+
+  </script>
 @endSection

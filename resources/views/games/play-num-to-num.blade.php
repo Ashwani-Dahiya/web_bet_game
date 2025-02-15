@@ -89,17 +89,21 @@
         $(document).ready(function() {
             let totalPoints = 0;
             let walletPoints = parseInt($('#pointDisplay').text()) || 0;
+            let addedNumbers = new Set();
 
             function generateNumbers(start, end) {
                 let numbers = [];
                 for (let i = start; i <= end; i++) {
-                    numbers.push(i.toString().padStart(2, '0')); // Ensure two-digit format
+                    let num = i.toString().padStart(2, '0'); // Ensure two-digit format
+                    if (!addedNumbers.has(num)) {
+                        numbers.push(num);
+                    }
                 }
                 return numbers;
             }
 
-            function updateHiddenInput(numbers) {
-                $("#crossed-numbers").val(numbers.join(",")); // Store numbers as a comma-separated string
+            function updateHiddenInput() {
+                $("#crossed-numbers").val(Array.from(addedNumbers).join(",")); // Store numbers as comma-separated string
             }
 
             function updatePointsDisplay() {
@@ -112,12 +116,19 @@
                 }
             }
 
+            function checkBetButton() {
+                if (addedNumbers.size > 0) {
+                    $("button[type='submit']").prop("disabled", false);
+                } else {
+                    $("button[type='submit']").prop("disabled", true);
+                }
+            }
+
             $("#add-btn").click(function() {
                 let startNum = parseInt($("#first-crossing").val(), 10);
                 let endNum = parseInt($("#second-crossing").val(), 10);
                 let points = parseInt($("#points-input").val(), 10);
 
-                // Validation Checks
                 if (isNaN(startNum) || isNaN(endNum) || isNaN(points)) {
                     alert("All fields are required!");
                     return;
@@ -135,14 +146,14 @@
                     return;
                 }
 
-                // Clear previous table data
-                $("table tbody").empty();
-                totalPoints = 0;
-
-                // Generate numbers from Start to End
                 let numbers = generateNumbers(startNum, endNum);
 
-                // Append new rows to table
+                // Check if adding these numbers will exceed the limit of 50
+                if (addedNumbers.size + numbers.length > 50) {
+                    alert("You can add only up to 50 numbers!");
+                    return;
+                }
+
                 numbers.forEach((num) => {
                     $("table tbody").append(`
                         <tr>
@@ -150,43 +161,38 @@
                             <td>${num}</td>
                             <td>${points}</td>
                             <td>
-                                <button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
+                                <button type="button" class="btn btn-danger btn-sm delete-btn" data-number="${num}" data-points="${points}">Delete</button>
                             </td>
                         </tr>
                     `);
+                    addedNumbers.add(num);
+                    totalPoints += points;
                 });
 
-                // Update total points
-                totalPoints = numbers.length * points;
                 $("#total-points").text(totalPoints);
-
-                // Update the hidden input field with the generated numbers
-                updateHiddenInput(numbers);
-
-                // Update wallet points
+                updateHiddenInput();
                 updatePointsDisplay();
+                checkBetButton();
             });
 
             $(document).on("click", ".delete-btn", function() {
                 const row = $(this).closest("tr");
-                const points = parseInt(row.find("td:nth-child(3)").text(), 10);
+                const num = $(this).data("number");
+                const points = parseInt($(this).data("points"), 10);
 
-                if (!isNaN(points) && points > 0) {
-                    totalPoints -= points;
-                }
-
+                addedNumbers.delete(num);
+                totalPoints -= points;
                 row.remove();
 
-                const remainingNumbers = [];
-                $("table tbody tr").each(function() {
-                    const num = $(this).find("td:nth-child(2)").text();
-                    remainingNumbers.push(num);
-                });
-
-                updateHiddenInput(remainingNumbers);
+                $("#total-points").text(totalPoints);
+                updateHiddenInput();
                 updatePointsDisplay();
+                checkBetButton();
             });
+
+            checkBetButton();
         });
     </script>
+
 
 @endSection

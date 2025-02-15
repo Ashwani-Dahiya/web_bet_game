@@ -60,119 +60,140 @@
                             <?php endfor; ?>
                         </tbody>
                     </table>
-                    <div class="d-flex justify-content-between p-2" style="background-color: #f8f9fa;">
+                    <div class="d-flex justify-content-between p-2" style="background-color: #d8d6d6;">
                         <span class="fw-bold">Total Points</span>
                         <span id="overall-total" class="fw-bold">0</span>
                     </div>
-                    <button type="submit" class="btn btn-play">Place bet</button>
+                    <div class="mt-3 ">
+                        <button type="submit" class="btn btn-play btn-block btn-danger col-12">Place bet</button>
+                    </div>
                 </div>
             </form>
 
             <script>
                 $(document).ready(function() {
-                    let walletPoints = parseInt($('#pointDisplay').text()) || 0;
+    let walletPoints = parseInt($('#pointDisplay').text()) || 0;
 
-                    $(".manual-jodi-input").on("input", function() {
-                        let value = $(this).val();
-                        if (!/^\d{0,2}$/.test(value)) {
-                            $(this).val(value.slice(0, 2));
-                        }
-                        if (value.length === 2) {
-                            let nextInput = $(this).closest("td").next().find(".manual-jodi-input");
-                            if (nextInput.length) {
-                                nextInput.focus();
-                            } else {
-                                $(this).closest("tr").find(".manual-point-input").focus();
-                            }
-                        }
-                    });
+    $(".manual-jodi-input").on("input", function() {
+        let value = $(this).val();
+        if (!/^\d{0,2}$/.test(value)) {
+            $(this).val(value.slice(0, 2));
+        }
+        if (value.length === 2) {
+            let nextInput = $(this).closest("td").next().find(".manual-jodi-input");
+            if (nextInput.length) {
+                nextInput.focus();
+            } else {
+                $(this).closest("tr").find(".manual-point-input").focus();
+            }
+        }
 
-                    $(".manual-jodi-input, .manual-point-input").on("input", function() {
-                        let overallTotal = 0;
-                        $("tbody tr").each(function(rowIndex) {
-                            let filledCount = 0;
-                            let pointValue = parseFloat($(`#manual-point-${rowIndex}`).val()) || 0;
-                            let values = [];
-                            let isUnique = true;
+        // Check for duplicates across all the "jodi" numbers
+        checkForDuplicateJodiNumbers();
+    });
 
-                            $(this).find(".manual-jodi-input").each(function() {
-                                let inputVal = $(this).val();
-                                if (inputVal && inputVal.trim() !== "") {
-                                    filledCount++;
-                                    if (values.includes(inputVal)) {
-                                        isUnique = false;
-                                        return false;
-                                    }
-                                    values.push(inputVal);
-                                }
-                            });
+    $(".manual-jodi-input, .manual-point-input").on("input", function() {
+        let overallTotal = 0;
+        $("tbody tr").each(function(rowIndex) {
+            let filledCount = 0;
+            let pointValue = parseFloat($(`#manual-point-${rowIndex}`).val()) || 0;
+            let values = [];
+            let isUnique = true;
 
-                            let rowTotal = filledCount * pointValue;
-                            $(`#manual-total-${rowIndex}`).text(rowTotal);
-                            overallTotal += rowTotal;
-                        });
+            $(this).find(".manual-jodi-input").each(function() {
+                let inputVal = $(this).val();
+                if (inputVal && inputVal.trim() !== "") {
+                    filledCount++;
+                    if (values.includes(inputVal)) {
+                        isUnique = false;
+                        return false;
+                    }
+                    values.push(inputVal);
+                }
+            });
 
-                        let newWalletBalance = walletPoints - overallTotal;
-                        if (newWalletBalance >= 0) {
-                            $("#overall-total").text(overallTotal);
-                            $("#pointDisplay").text(newWalletBalance);
-                            $("#pointAddedDisplay").text(overallTotal);
-                        } else {
-                            alert("You don't have enough points!");
-                            $(this).val('');
-                        }
-                    });
+            let rowTotal = filledCount * pointValue;
+            $(`#manual-total-${rowIndex}`).text(rowTotal);
+            overallTotal += rowTotal;
+        });
 
-                    $("#manual-jodi-form").on("submit", function(e) {
-                        let isValid = true;
-                        let atLeastOneEntry = false;
+        let newWalletBalance = walletPoints - overallTotal;
+        if (newWalletBalance >= 0) {
+            $("#overall-total").text(overallTotal);
+            $("#pointDisplay").text(newWalletBalance);
+            $("#pointAddedDisplay").text(overallTotal);
+        } else {
+            alert("You don't have enough points!");
+            $(this).val('');
+        }
+    });
 
-                        $("tbody tr").each(function(rowIndex) {
-                            let jodiInputs = $(this).find(".manual-jodi-input");
-                            let pointInput = $(this).find(".manual-point-input");
-                            let hasJodi = false;
-                            let values = [];
+    function checkForDuplicateJodiNumbers() {
+        let allJodiNumbers = [];
+        $(".manual-jodi-input").each(function() {
+            let value = $(this).val();
+            if (value && value.trim() !== "") {
+                if (allJodiNumbers.includes(value)) {
+                    alert("Duplicate jodi numbers are not allowed!");
+                    $(this).val('');
+                } else {
+                    allJodiNumbers.push(value);
+                }
+            }
+        });
+    }
 
-                            jodiInputs.each(function() {
-                                let value = $(this).val();
-                                if (value && value.trim() !== "") {
-                                    hasJodi = true;
-                                    if (values.includes(value)) {
-                                        alert("Duplicate jodi numbers are not allowed in row " + (rowIndex + 1));
-                                        isValid = false;
-                                        return false;
-                                    }
-                                    if (!/^\d{2}$/.test(value)) {
-                                        alert("Please enter valid two-digit numbers in row " + (rowIndex + 1));
-                                        isValid = false;
-                                        return false;
-                                    }
-                                    values.push(value);
-                                }
-                            });
+    $("#manual-jodi-form").on("submit", function(e) {
+        let isValid = true;
+        let atLeastOneEntry = false;
 
-                            if (hasJodi) {
-                                atLeastOneEntry = true;
-                                let pointValue = pointInput.val();
-                                if (!pointValue || pointValue <= 0) {
-                                    alert("Please enter a valid point value for row " + (rowIndex + 1));
-                                    isValid = false;
-                                    return false;
-                                }
-                            }
-                        });
+        $("tbody tr").each(function(rowIndex) {
+            let jodiInputs = $(this).find(".manual-jodi-input");
+            let pointInput = $(this).find(".manual-point-input");
+            let hasJodi = false;
+            let values = [];
 
-                        if (!atLeastOneEntry) {
-                            alert("Please enter at least one jodi number and point value");
-                            isValid = false;
-                        }
+            jodiInputs.each(function() {
+                let value = $(this).val();
+                if (value && value.trim() !== "") {
+                    hasJodi = true;
+                    if (values.includes(value)) {
+                        alert("Duplicate jodi numbers are not allowed in row " + (rowIndex + 1));
+                        isValid = false;
+                        return false;
+                    }
+                    if (!/^\d{2}$/.test(value)) {
+                        alert("Please enter valid two-digit numbers in row " + (rowIndex + 1));
+                        isValid = false;
+                        return false;
+                    }
+                    values.push(value);
+                }
+            });
 
-                        if (!isValid) {
-                            e.preventDefault();
-                            return false;
-                        }
-                    });
-                });
+            if (hasJodi) {
+                atLeastOneEntry = true;
+                let pointValue = pointInput.val();
+                if (!pointValue || pointValue <= 0) {
+                    alert("Please enter a valid point value for row " + (rowIndex + 1));
+                    isValid = false;
+                    return false;
+                }
+            }
+        });
+
+        if (!atLeastOneEntry) {
+            alert("Please enter at least one jodi number and point value");
+            isValid = false;
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+            return false;
+        }
+    });
+});
+
             </script>
 
         </div>

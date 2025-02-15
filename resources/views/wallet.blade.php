@@ -278,8 +278,9 @@ table {
 th {
     background-color: #28a745;
     color: white;
-    padding: 12px;
-    text-align: left;
+    padding: 9px;
+    text-align: center;
+    font-size: 14px;
 }
 
 td {
